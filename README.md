@@ -1,6 +1,9 @@
 # WinManageSvc
-A PowerShell script for managing services on your Windows system (to avoid errors when performing stop or restart services, it is recommended to run the script as administrator)
-<hr>
 
-### USAGE
-&nbsp;&nbsp; ``` powershell.exe .\manage_service.ps1 ```
+This PowerShell script allows you to perform service management operations such as checking, stopping, or restarting services.  
+To avoid permission-related errors, run the script as Administrator.
+
+## Usage
+
+```powershell
+powershell.exe .\manage_service.ps1
