@@ -7,7 +7,7 @@
 function print_usage {
 	Write-Host -ForegroundColor "red" "`nDescription:"
 	Write-Host "   Script for managing services on your Windows system (such as getting the list of services, restarting them or stopping them)"
-        Write-Host "   To avoid errors when performing stop or restart services, it is recommended to run the script as administrator"
+    Write-Host "   To avoid errors when performing stop or restart services, it is recommended to run the script as administrator"
 	Write-Host "`n   File created witih the list of the running services: $file_svc_ok"
 	Write-Host "`n   File created with the list of other services excluding running services: $file_svc_ko`n"
 }
