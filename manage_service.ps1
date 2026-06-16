@@ -13,45 +13,45 @@ function print_usage {
 }
 
 function verify_svc_files {
-        foreach ($item in $files) {
-                if (Test-Path $item -PathType Leaf) {
-                        Clear-Content $item
-                }
+    foreach ($item in $files) {
+        if (Test-Path $item -PathType Leaf) {
+            Clear-Content $item
         }
+    }
 }
 
 function create_svc_files {
-        $header = "Name`tDisplayName`tStatus`tStartType"
-        $header > $file_svc_ok
-        $header > $file_svc_ko
+    $header = "Name`tDisplayName`tStatus`tStartType"
+    $header > $file_svc_ok
+    $header > $file_svc_ko
 
-        foreach ($item in $get_svc) {
-                $svc_name = $item.'Name'
-                $svc_display_name = $item.'DisplayName'
-                $svc_status = $item.'Status'
-                $svc_type = $item.'StartType'
+    foreach ($item in $get_svc) {
+        $svc_name = $item.'Name'
+        $svc_display_name = $item.'DisplayName'
+        $svc_status = $item.'Status'
+        $svc_type = $item.'StartType'
 
-                if ($svc_status -eq "Running") {
-                        "$svc_name`t$svc_display_name`t$svc_status`t$svc_type" >> $file_svc_ok
-                } else {
-                        "$svc_name`t$svc_display_name`t$svc_status`t$svc_type" >> $file_svc_ko
-                }
+        if ($svc_status -eq "Running") {
+            "$svc_name`t$svc_display_name`t$svc_status`t$svc_type" >> $file_svc_ok
+        } else {
+            "$svc_name`t$svc_display_name`t$svc_status`t$svc_type" >> $file_svc_ko
         }
+    }
 
-        Write-Host "Running services can be found in: $file_svc_ok"
-        Write-Host "Other services can be found in: $file_svc_ko"
+    Write-Host "Running services can be found in: $file_svc_ok"
+    Write-Host "Other services can be found in: $file_svc_ko"
 }
 
 function svc_existence {
-        $flag = 0
+    $flag = 0
 
-        foreach ($item in $get_svc) {
-                if ($item.'Name' -eq $user_input -or $item.'DisplayName' -eq $user_input) {
-                        $flag = 1
-                }
+    foreach ($item in $get_svc) {
+        if ($item.'Name' -eq $user_input -or $item.'DisplayName' -eq $user_input) {
+            $flag = 1
         }
+    }
 
-        return $flag
+    return $flag
 }
 
 
@@ -67,37 +67,37 @@ Start-Sleep -Seconds 2.0        # it suspends the activity in a script or sessio
 $user_input = Read-Host "Do you want to continue with the program? (y/n)"
 
 if ($user_input -eq "y") {
-        $get_svc = Get-Service | Select-Object Name, DisplayName, Status, StartType
-        verify_svc_files
-        create_svc_files
+    $get_svc = Get-Service | Select-Object Name, DisplayName, Status, StartType
+    verify_svc_files
+    create_svc_files
 
-        while ($true) {
-                $user_input = Read-Host "`nDo you want restart a service or stop its? (restart/stop) - type 0 to quit"
+    while ($true) {
+        $user_input = Read-Host "`nDo you want restart a service or stop its? (restart/stop) - type 0 to quit"
 
-                if ($user_input -eq "restart") {
-                        $user_input = Read-Host "Type the service you want to restart"
-                        $flag = svc_existence
+        if ($user_input -eq "restart") {
+            $user_input = Read-Host "Type the service you want to restart"
+            $flag = svc_existence
 
-                        if ($flag) {
-                                Get-Service $user_input | Restart-Service
-                        } else {
-                                Write-Host "Service not found!"
-                        }
-                } elseif ($user_input -eq "stop") {
-                        $user_input = Read-Host "Type the service you want to stop"
-                        $flag = svc_existence
+            if ($flag) {
+                Get-Service $user_input | Restart-Service
+            } else {
+                Write-Host "Service not found!"
+            }
+        } elseif ($user_input -eq "stop") {
+            $user_input = Read-Host "Type the service you want to stop"
+            $flag = svc_existence
 
-                        if ($flag) {
-                                Get-Service $user_input | Stop-Service
-                        } else {
-                                Write-Host "Service not found!"
-                        }
-                } elseif ($user_input -eq 0) {
-                        break
-                }
+            if ($flag) {
+                Get-Service $user_input | Stop-Service
+            } else {
+                Write-Host "Service not found!"
+            }
+        } elseif ($user_input -eq 0) {
+            break
         }
+    }
 } else {
-        Write-Host "Exit from the program!"
+    Write-Host "Exit from the program!"
 }
 
 Write-Host ""
