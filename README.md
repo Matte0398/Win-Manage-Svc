@@ -21,3 +21,4 @@ To avoid permission-related errors, run the script as Administrator.
 
 ```powershell
 powershell.exe .\manage_service.ps1
+```
